@@ -21,8 +21,7 @@ def login():
                 if "authenticated" not in session:
                     session["authenticated"] = True
                 return redirect(url_for("index"))
-        else:
-            return render_template("login.html", error="Login failed.")
+        return render_template("login.html", error="Login failed.")
     return render_template("login.html", error="")
 
 
