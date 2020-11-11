@@ -1,3 +1,7 @@
+"""
+Creates and configures the app context.
+"""
+
 from flask import Flask
 
 
