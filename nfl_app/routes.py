@@ -1,4 +1,5 @@
 from flask import current_app as app
+from flask import render_template, request, redirect, url_for, session
 
 
 from nfl_app.passwords import hash_pwd, check_pwd
@@ -15,13 +16,14 @@ def login():
     if request.method == "POST":
         email = request.form.get("email")
         password = request.form.get("password")
-        if user_exists(email) and check_pwd(password):
-            if "authenticated" not in session:
-                session["authenticated"] = True
-            return redirect(url_for("index"))
+        if user_exists(email):
+            if check_pwd(email, password):
+                if "authenticated" not in session:
+                    session["authenticated"] = True
+                return redirect(url_for("index"))
         else:
-            return render_template("login.html", "Login failed.")
-    return render_template("login.html", "")
+            return render_template("login.html", error="Login failed.")
+    return render_template("login.html", error="")
 
 
 @app.route("/register", methods=["GET", "POST"])

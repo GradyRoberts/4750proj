@@ -29,6 +29,16 @@ def user_exists(email):
     return rv != None
 
 
+def retrieve_pwd_hash(email):
+    if (not user_exists(email)):
+        return None
+    cur = mysql.connection.cursor()
+    sql = """SELECT password_hash FROM Users WHERE email=%s"""
+    cur.execute(sql, (email,))
+    rv = cur.fetchone()
+    return rv[0]
+
+
 def fetch_all_users():
     """
     for development purposes
