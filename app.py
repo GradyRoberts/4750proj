@@ -34,7 +34,6 @@ def register():
         email = request.form.get('email')
         password = request.form.get('password')
         hashed_password = hash_pwd(password)
-        print(f"{fname} {lname}, {email}, {password} -> {hashed_password}")
 
         cur = mysql.connection.cursor()
         sql = """INSERT INTO Users VALUES (%s,%s,%s,%s)"""
