@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Login{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <p>{{ message }}</p>
+    <form method="post">
+        <label for="email">Email (UVA Only)</label>
+        <input name="email" id="email" required><br>
+        <label for="password">Password</label>
+        <input name="password" id="password" type="password" required><br>
+        <input type="submit" value="Login">
+    </form>
+{% endblock %}
