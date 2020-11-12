@@ -1,3 +1,7 @@
+"""
+Functions for hashing and checking passwords.
+"""
+
 import bcrypt
 
 from nfl_app.users import retrieve_pwd_hash
