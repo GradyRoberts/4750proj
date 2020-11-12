@@ -6,3 +6,35 @@
 .error {
     color: red;
 }
+
+.navbar-top {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: orange;
+}
+
+.navbar-li {
+    float: right;
+}
+
+.navbar-li:first-child {
+    float: left;
+}
+
+.navbar-li a, .navbar-li p {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    margin: 0;
+}
+
+.navbar-li a:hover {
+    background-color: navy;
+}

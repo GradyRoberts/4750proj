@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <title>NFL Plays - {% block title %}{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 <section class="content">
-    <header>
-        {% block header %}{% endblock %}
-    </header>
     {% block content %}{% endblock %}
 </section>

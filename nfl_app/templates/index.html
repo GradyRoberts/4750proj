@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div>
+        <ul class="navbar-top">
+            <li class="navbar-li">
+                <p style="font-weight: bold;">NFL Plays</p>
+            </li>
+            {% if authenticated %}
+                <li class="navbar-item">
+                    <a href="{{ url_for('logout') }}">Log Out</a>
+                </li>
+                <li class="navbar-item">
+                    <p>Welcome, {{ fname }}!</p>
+                </li>
+            {% else %}
+                <li class="navbar-item">
+                    <a href="{{ url_for('login') }}">Login</a>
+                </li> 
+                <li class="navbar-item">
+                    <a href="{{ url_for('register') }}">Register</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+{% endblock %}
