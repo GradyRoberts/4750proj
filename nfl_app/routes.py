@@ -8,7 +8,7 @@ from flask import render_template, request, redirect, url_for, session
 
 from nfl_app.passwords import hash_pwd, check_pwd
 from nfl_app.users import add_new_user, remove_user, user_exists, fetch_user, fetch_all_users
-
+from nfl_app.search_db import went_for_it, matchups, passer, receiver, rusher, punter, kicker, penalty
 
 @app.route("/")
 def index():
@@ -21,7 +21,7 @@ def index():
                 email = session["email"]
                 fname = fetch_user(email)[0]
     return render_template("index.html", authenticated=authenticated, fname=fname)
-
+    
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -57,3 +57,30 @@ def register():
         add_new_user(fname, lname, email, hashed_password)
         return redirect(url_for("login"))
     return render_template("register.html")
+
+
+@app.route("/search", methods=["GET","POST"])
+def search():
+    if not session.get("authenticated"):
+        return redirect(url_for("login"))
+    if request.method == "POST":
+        rows = None
+        search_type = request.form.get("form_name")
+        if (search_type == "wentforit"):
+            rows = went_for_it(request.form.get("team_name"))
+        elif (search_type == "matchup"):
+            rows = matchups(request.form.get("teamA"), request.form.get("teamB"))
+        elif (search_type == "penalty"):
+            rows = penalty(request.form.get("player_name"))
+        elif (search_type == "punter"):
+            rows = punter(request.form.get("player_name"))
+        elif (search_type == "kicker"):
+            rows = kicker(request.form.get("player_name"))
+        elif (search_type == "passer"):
+            rows = passer(request.form.get("player_name"))
+        elif (search_type == "receiver"):
+            rows = receiver(request.form.get("player_name"))
+        elif (search_type == "rusher"):
+            rows = rusher(request.form.get("player_name"))
+        return str(rows)
+    return render_template("search.html")

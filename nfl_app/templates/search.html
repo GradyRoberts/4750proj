@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Search
+{% endblock %}
+
+{% block content %}
+    <div>
+        <p>Find all the times a team "went for it" on Fourth Down.</p>
+        <p>Use 3 letter team identifier, ex. PIT = Pittsburgh Steelers</p>
+        <form id="wentforit" method="POST">
+            <input type="hidden" name="form_name" value="wentforit">
+            <label for="team_name">Team Name</label>
+            <input name="team_name" id="team_name" required><br>
+            <input type="submit" value="Search">
+        </form>
+    </div>
+    <div>
+        <p>Find all the matchups between two teams.</p>
+        <p>Use 3 letter team identifier, ex. MIA = Miami Dolphins</p>
+        <form id="matchup" method="POST">
+            <input type="hidden" name="form_name" value="matchup">
+            <label for="teamA">First Team Name</label>
+            <input name="teamA" id="teamA" required><br>
+            <label for="teamB">Second Team Name</label>
+            <input name="teamB" id="teamB" required><br>
+            <input type="submit" value="Search">
+        </form>
+    </div>
+    <div>
+        <p>Find all plays with a specific Passer</p>
+        <form id="passer" method="POST">
+            <input type="hidden" name="form_name" value="passer">
+            <label for="player_name">Player Name</label>
+            <input name="player_name" id="player_name" required><br>
+            <input type="submit" value="Search">
+        </form>
+    </div>
+    <div>
+        <p>Find all plays with a specific Receiver</p>
+        <form id="receiver" method="POST">
+            <input type="hidden" name="form_name" value="receiver">
+            <label for="player_name">Player Name</label>
+            <input name="player_name" id="player_name" required><br>
+            <input type="submit" value="Search">
+        </form>
+    </div>
+    <div>
+        <p>Find all plays with a specific Rusher</p>
+        <form id="rusher" method="POST">
+            <input type="hidden" name="form_name" value="rusher">
+            <label for="player_name">Player Name</label>
+            <input name="player_name" id="player_name" required><br>
+            <input type="submit" value="Search">
+        </form>
+    </div>    
+    <div>
+        <p>Find all plays with a specific Punter</p>
+        <form id="punter" method="POST">
+            <input type="hidden" name="form_name" value="punter">
+            <label for="player_name">Player Name</label>
+            <input name="player_name" id="player_name" required><br>
+            <input type="submit" value="Search">
+        </form>
+    </div>
+    <div>
+        <p>Find all plays with a specific Kicker</p>
+        <form id="kicker" method="POST">
+            <input type="hidden" name="form_name" value="kicker">
+            <label for="player_name">Player Name</label>
+            <input name="player_name" id="player_name" required><br>
+            <input type="submit" value="Search">
+        </form>
+    </div>
+    <div>
+        <p>Find all times a player was involved with a Penalty</p>
+        <form id="penalty" method="POST">
+            <input type="hidden" name="form_name" value="penalty">
+            <label for="player_name">Player Name</label>
+            <input name="player_name" id="player_name" required><br>
+            <input type="submit" value="Search">
+        </form>
+    </div>
+{% endblock %}

@@ -2,11 +2,7 @@
 Functions that interface with the database related to users.
 """
 
-from flask import current_app as app
-from flask_mysqldb import MySQL
-
-
-mysql = MySQL(app)
+from nfl_app.conndb import mysql
 
 
 def add_new_user(fname, lname, email, hashed_password):
