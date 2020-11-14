@@ -5,6 +5,7 @@ Register
 {% endblock %}
 
 {% block content %}
+    <p class="error">{{ error }}</p>
     <form method="post">
         <label for="fname">First Name</label>
         <input name="fname" id="fname" required><br>

@@ -6,7 +6,7 @@ import csv
 
 
 from flask import current_app as app
-from flask import render_template, request, redirect, url_for, session, make_response
+from flask import render_template, request, redirect, url_for, session, make_response, flash
 
 
 from nfl_app.passwords import hash_pwd, check_pwd
@@ -58,9 +58,13 @@ def register():
         email = request.form.get("email")
         password = request.form.get("password")
         hashed_password = hash_pwd(password)
-        add_new_user(fname, lname, email, hashed_password)
+        try:
+            add_new_user(fname, lname, email, hashed_password)
+        except Exception as e:
+            flash("UVA emails only!")
+            return render_template("register.html", error="Invalid email.")
         return redirect(url_for("login"))
-    return render_template("register.html")
+    return render_template("register.html", error="")
 
 
 @app.route("/search", methods=["GET","POST"])
