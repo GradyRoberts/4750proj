@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Search Results
+{% endblock %}
+
+{% block content %}
+    <div>
+        <a href="{{ url_for('search') }}">Back to Search</a>
+    </div>
+    <div>
+        <table>
+            <tr>
+                <th>Game Date</th>
+                <th>Home Team</th>
+                <th>Away Team</th>
+                <th>Final Home Score</th>
+                <th>Final Away Score</th>
+                <th>Actions</th>
+            </tr>
+            {% for row in rows %}
+                <tr>
+                    <td>{{ row[0] }}</td>
+                    <td>{{ row[1] }}</td>
+                    <td>{{ row[2] }}</td>
+                    <td>{{ row[3] }}</td>
+                    <td>{{ row[4] }}</td>
+                    <td>
+                        <a href="{{ url_for('index') }}">Save</a>, 
+                        <a href="{{ url_for('index') }}">Update</a>, 
+                        <a href="{{ url_for('index') }}">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

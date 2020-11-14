@@ -84,7 +84,7 @@ def penalty(player_name):
       Inner tuple is (game_id, play_id, penalty_team, penalty_player_name, penalty_yards)
   """
   cur = mysql.connection.cursor()
-  player_name = mysql.connection.escape_string(player_name)
+  # player_name = mysql.connection.escape_string(player_name)
   sql = f'SELECT * FROM PenaltyPlay WHERE penalty_player_name LIKE "%{player_name}%"'
   cur.execute(sql)
   rv = cur.fetchall()
@@ -102,12 +102,12 @@ def punter(player_name):
   
   Returns:
     rv : tuple[tuple]
-      Inner tuple is (game_id, play_id, field_foal_result, kick_distance, extra_point_result, 
+      Inner tuple is (game_id, play_id, field_goal_result, kick_distance, extra_point_result, 
                 kickoff_returned_player_name, return_yards, punter_player_name, 
                 kicker_player_name, punt_returner_player_name)
   """
   cur = mysql.connection.cursor()
-  player_name = mysql.connection.escape_string(player_name)
+  # player_name = mysql.connection.escape_string(player_name)
   sql = f'SELECT * FROM KickPlay WHERE punter_player_name LIKE "%{player_name}%"'
   cur.execute(sql)
   rv = cur.fetchall()
@@ -130,7 +130,7 @@ def kicker(player_name):
                 kicker_player_name, punt_returner_player_name)
   """
   cur = mysql.connection.cursor()
-  player_name = mysql.connection.escape_string(player_name)
+  # player_name = mysql.connection.escape_string(player_name)
   sql = f'SELECT * FROM KickPlay WHERE kicker_player_name LIKE "%{player_name}%"'
   cur.execute(sql)
   rv = cur.fetchall()
@@ -152,7 +152,7 @@ def passer(player_name):
                 passer_player_name, receiver_player_name, incomplete_pass)
   """
   cur = mysql.connection.cursor()
-  player_name = mysql.connection.escape_string(player_name)
+  # player_name = mysql.connection.escape_string(player_name)
   sql = f'SELECT * FROM PassPlay WHERE passer_player_name LIKE "%{player_name}%"'
   cur.execute(sql)
   rv = cur.fetchall()
@@ -174,7 +174,7 @@ def receiver(player_name):
                 passer_player_name, receiver_player_name, incomplete_pass)
   """
   cur = mysql.connection.cursor()
-  player_name = mysql.connection.escape_string(player_name)
+  # player_name = mysql.connection.escape_string(player_name)
   sql = f'SELECT * FROM PassPlay WHERE receiver_player_name LIKE "%{player_name}%"'
   cur.execute(sql)
   rv = cur.fetchall()
@@ -195,7 +195,7 @@ def rusher(player_name):
       Inner tuple is (game_id, play_id, run_gap, run_location, rusher_player_name, yards_gained)
   """
   cur = mysql.connection.cursor()
-  player_name = mysql.connection.escape_string(player_name)
+  # player_name = mysql.connection.escape_string(player_name)
   sql = f'SELECT * FROM RunPlay WHERE rusher_player_name LIKE "%{player_name}%"'
   cur.execute(sql)
   rv = cur.fetchall()

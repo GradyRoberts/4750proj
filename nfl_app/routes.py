@@ -1,14 +1,18 @@
 """
 Includes all of the routes for the app.
 """
+from io import StringIO
+import csv
+
 
 from flask import current_app as app
-from flask import render_template, request, redirect, url_for, session
+from flask import render_template, request, redirect, url_for, session, make_response
 
 
 from nfl_app.passwords import hash_pwd, check_pwd
 from nfl_app.users import add_new_user, remove_user, user_exists, fetch_user, fetch_all_users
-from nfl_app.search_db import went_for_it, matchups, passer, receiver, rusher, punter, kicker, penalty
+from nfl_app.search import perform_search
+
 
 @app.route("/")
 def index():
@@ -64,23 +68,14 @@ def search():
     if not session.get("authenticated"):
         return redirect(url_for("login"))
     if request.method == "POST":
-        rows = None
-        search_type = request.form.get("form_name")
-        if (search_type == "wentforit"):
-            rows = went_for_it(request.form.get("team_name"))
-        elif (search_type == "matchup"):
-            rows = matchups(request.form.get("teamA"), request.form.get("teamB"))
-        elif (search_type == "penalty"):
-            rows = penalty(request.form.get("player_name"))
-        elif (search_type == "punter"):
-            rows = punter(request.form.get("player_name"))
-        elif (search_type == "kicker"):
-            rows = kicker(request.form.get("player_name"))
-        elif (search_type == "passer"):
-            rows = passer(request.form.get("player_name"))
-        elif (search_type == "receiver"):
-            rows = receiver(request.form.get("player_name"))
-        elif (search_type == "rusher"):
-            rows = rusher(request.form.get("player_name"))
-        return str(rows)
+        rows, template = perform_search(request.form)
+        if (request.form.get("export")):
+            si = StringIO()
+            cw = csv.writer(si)
+            cw.writerow(rows)
+            output = make_response(si.getvalue())
+            output.headers["Content-Disposition"] = "attachment; filename=export.csv"
+            output.headers["Content-type"] = "text/csv"
+            return output
+        return render_template(template, rows=rows)
     return render_template("search.html")
