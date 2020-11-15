@@ -16,7 +16,6 @@ Search Results
                 <th>Away Team</th>
                 <th>Final Home Score</th>
                 <th>Final Away Score</th>
-                <th>Actions</th>
             </tr>
             {% for row in rows %}
                 <tr>
@@ -25,10 +24,6 @@ Search Results
                     <td>{{ row[2] }}</td>
                     <td>{{ row[3] }}</td>
                     <td>{{ row[4] }}</td>
-                    <td> 
-                        <a href="{{ url_for('index') }}">Update</a>, 
-                        <a href="{{ url_for('index') }}">Delete</a>
-                    </td>
                 </tr>
             {% endfor %}
         </table>
