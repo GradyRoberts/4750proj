@@ -38,7 +38,7 @@ def index():
     username = ""
     email = ""
     authenticated = False
-    if request.cookies.get("authenticated"):
+    if request.cookies.get("authenticated")=="True":
         authenticated = True
         email = request.cookies.get("email")
         fname = fetch_user(email)[0]
@@ -73,7 +73,7 @@ def login():
 def logout():
     res = make_response(redirect(url_for("index")))
     if "authenticated" in request.cookies:
-        res.set_cookie("authenticated", None)
+        res.set_cookie("authenticated", "False")
     return res
 
 
@@ -96,7 +96,7 @@ def register():
 
 @app.route("/account", methods=["GET", "POST"])
 def account():
-    if not request.cookies.get("authenticated"):
+    if request.cookies.get("authenticated")=="False":
         return redirect(url_for("login"))
     email = request.args.get("email")
     if request.method == "POST":
@@ -117,7 +117,7 @@ def account():
 
 @app.route("/save_play")
 def save():
-    if not request.cookies.get("authenticated"):
+    if request.cookies.get("authenticated")=="False":
         return redirect(url_for("login"))
     email = request.args.get("email")
     game_id = request.args.get("game_id")
@@ -128,7 +128,7 @@ def save():
 
 @app.route("/unsave_play")
 def unsave():
-    if not request.cookies.get("authenticated"):
+    if request.cookies.get("authenticated")=="False":
         return redirect(url_for("login"))
     email = request.args.get("email")
     game_id = request.args.get("game_id")
@@ -139,7 +139,7 @@ def unsave():
 
 @app.route("/search", methods=["GET", "POST"])
 def search():
-    if not request.cookies.get("authenticated"):
+    if request.cookies.get("authenticated")=="False":
         return redirect(url_for("login"))
     if request.method == "POST":
         rows, template = perform_search(request.form)
