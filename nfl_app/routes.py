@@ -11,7 +11,6 @@ from flask import (
     request,
     redirect,
     url_for,
-    session,
     make_response,
     flash,
 )
@@ -39,13 +38,11 @@ def index():
     username = ""
     email = ""
     authenticated = False
-    if "authenticated" in session:
-        if session["authenticated"]:
-            if "email" in session:
-                authenticated = True
-                email = session["email"]
-                fname = fetch_user(email)[0]
-                username = email.split("@")[0]
+    if request.cookies.get("authenticated"):
+        authenticated = True
+        email = request.cookies.get("email")
+        fname = fetch_user(email)[0]
+        username = email.split("@")[0]
     return render_template(
         "index.html",
         authenticated=authenticated,
@@ -62,20 +59,22 @@ def login():
         password = request.form.get("password")
         if user_exists(email):
             if check_pwd(email, password):
-                if "authenticated" not in session:
-                    session["authenticated"] = True
-                if "email" not in session:
-                    session["email"] = email
-                return redirect(url_for("index"))
+                res = make_response(redirect(url_for("index")))
+                if "authenticated" not in request.cookies:
+                    res.set_cookie("authenticated", "True")
+                if "email" not in request.cookies:
+                    res.set_cookie("email", email)
+                return res
         return render_template("login.html", error="Login failed.")
     return render_template("login.html", error="")
 
 
 @app.route("/logout")
 def logout():
-    if "authenticated" in session:
-        session["authenticated"] = False
-    return redirect(url_for("index"))
+    res = make_response(redirect(url_for("index")))
+    if "authenticated" in request.cookies:
+        res.set_cookie("authenticated", None)
+    return res
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -97,7 +96,7 @@ def register():
 
 @app.route("/account", methods=["GET", "POST"])
 def account():
-    if not session.get("authenticated"):
+    if not request.cookies.get("authenticated"):
         return redirect(url_for("login"))
     email = request.args.get("email")
     if request.method == "POST":
@@ -118,7 +117,7 @@ def account():
 
 @app.route("/save_play")
 def save():
-    if not session.get("authenticated"):
+    if not request.cookies.get("authenticated"):
         return redirect(url_for("login"))
     email = request.args.get("email")
     game_id = request.args.get("game_id")
@@ -129,7 +128,7 @@ def save():
 
 @app.route("/unsave_play")
 def unsave():
-    if not session.get("authenticated"):
+    if not request.cookies.get("authenticated"):
         return redirect(url_for("login"))
     email = request.args.get("email")
     game_id = request.args.get("game_id")
@@ -140,7 +139,7 @@ def unsave():
 
 @app.route("/search", methods=["GET", "POST"])
 def search():
-    if not session.get("authenticated"):
+    if not request.cookies.get("authenticated"):
         return redirect(url_for("login"))
     if request.method == "POST":
         rows, template = perform_search(request.form)
@@ -152,6 +151,6 @@ def search():
             output.headers["Content-Disposition"] = "attachment; filename=export.csv"
             output.headers["Content-type"] = "text/csv"
             return output
-        email = session.get("email")
+        email = request.cookies.get("email")
         return render_template(template, rows=rows, email=email)
     return render_template("search.html")
