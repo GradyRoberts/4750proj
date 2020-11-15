@@ -8,6 +8,12 @@ from flask_mysqldb import MySQL
 
 mysql = MySQL(app)
 
+admin_emails = [
+    "awz2pj@virginia.edu",
+    "ztm5xq@virginia.edu",
+    "gnr7aj@virginia.edu",
+    "dpc7ns@virginia.edu"
+]
 
 def add_new_user(fname, lname, email, hashed_password):
     cur = mysql.connection.cursor()
@@ -62,3 +68,11 @@ def fetch_all_users():
     rv = cur.fetchall()
     cur.close()
     return str(rv)
+
+
+def is_admin(email):
+    """
+    return true if user is admin
+    """
+    return email in admin_emails
+

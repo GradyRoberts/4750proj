@@ -1,0 +1,65 @@
+
+<div>
+    <form method="post">
+        <li class="navbar-li">
+            <p style="font-weight: bold;">NFL Plays</p>
+        </li>
+        {% if authenticated %}
+            <li class="navbar-item">
+                <a href="{{ url_for('logout') }}">Log Out</a>
+            </li>
+            <li class="navbar-item">
+                <p>Welcome, {{ fname }}!</p>
+            </li>
+
+            <label for="old_game_id">Game ID to edit</label>
+            <input name="old_game_id" id="old_game_id" required><br>
+
+            <label for="old_play_id">Play ID to edit</label>
+            <input name="old_play_id" id="old_play_id" required><br>
+
+            <label for="new_desc">Description</label>
+            <input name="new_desc" id="new_desc" required><br>
+
+            <label for="new_play_type">Play type</label>
+            <input name="new_play_type" id="new_play_type" required><br>
+
+            <label for="new_posteam">Posteam</label>
+            <input name="new_posteam" id="new_posteam" required><br>
+
+            <label for="new_posteam_type">Posteam type</label>
+            <input name="new_posteam_type" id="new_posteam_type" required><br>
+
+            <label for="new_yards_gained">Yards gained</label>
+            <input name="new_yards_gained" id="new_yards_gained" required><br>
+
+            <label for="new_side_of_field">Side of Field</label>
+            <input name="new_side_of_field" id="new_side_of_field" required><br>
+
+            <label for="new_yrdln">Yardline</label>
+            <input name="new_yrdln" id="new_yrdln" required><br>
+
+            <label for="new_qtr">Quarter</label>
+            <input name="new_qtr" id="new_qtr" required><br>
+
+            <label for="new_wp">WP</label>
+            <input name="new_wp" id="new_wp" required><br>
+
+            <label for="new_down">Down #</label>
+            <input name="new_down" id="new_down" required><br>
+
+            <label for="new_ydstogo">Yards to go</label>
+            <input name="new_ydstogo" id="new_ydstogo" required><br>
+
+            <input type="submit" value="remove user">
+        {% else %}
+            <p>You are not logged in</p>
+            <li class="navbar-item">
+                <a href="{{ url_for('login') }}">Login</a>
+            </li> 
+            <li class="navbar-item">
+                <a href="{{ url_for('register') }}">Register</a>
+            </li>
+        {% endif %}
+        </form>
+</div>

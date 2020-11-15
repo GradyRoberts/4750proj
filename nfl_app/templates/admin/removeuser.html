@@ -1,0 +1,30 @@
+<!-- {% extends 'base.html' %} -->
+
+<!-- {% block content %} -->
+    <div>
+        <form method="post">
+            <li class="navbar-li">
+                <p style="font-weight: bold;">NFL Plays</p>
+            </li>
+            {% if authenticated %}
+                <li class="navbar-item">
+                    <a href="{{ url_for('logout') }}">Log Out</a>
+                </li>
+                <li class="navbar-item">
+                    <p>Welcome, {{ fname }}!</p>
+                </li>
+                <label for="email">User's email address</label>
+                <input name="email" id="email" required><br>
+                <input type="submit" value="remove user">
+            {% else %}
+                <p>You are not logged in</p>
+                <li class="navbar-item">
+                    <a href="{{ url_for('login') }}">Login</a>
+                </li> 
+                <li class="navbar-item">
+                    <a href="{{ url_for('register') }}">Register</a>
+                </li>
+            {% endif %}
+            </form>
+    </div>
+<!-- {% endblock %} -->

@@ -13,6 +13,21 @@
                 <li class="navbar-item">
                     <p>Welcome, {{ fname }}!</p>
                 </li>
+                {% if isAdmin %}
+                <p>You have the following admin powers:</p>
+                <li class="navbar-item">
+                    <a href="{{ url_for('admin_remove_user') }}">Remove a user</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="{{ url_for('admin_add_play') }}">Remove a user</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="{{ url_for('admin_edit_play') }}">Remove a user</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="{{ url_for('admin_delete_play') }}">Remove a user</a>
+                </li>
+                {% endif %}
             {% else %}
                 <li class="navbar-item">
                     <a href="{{ url_for('login') }}">Login</a>
@@ -21,6 +36,7 @@
                     <a href="{{ url_for('register') }}">Register</a>
                 </li>
             {% endif %}
+
         </ul>
     </div>
 {% endblock %}
