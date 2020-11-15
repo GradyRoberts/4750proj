@@ -6,11 +6,29 @@ import csv
 
 
 from flask import current_app as app
-from flask import render_template, request, redirect, url_for, session, make_response, flash
+from flask import (
+    render_template,
+    request,
+    redirect,
+    url_for,
+    session,
+    make_response,
+    flash,
+)
 
 
 from nfl_app.passwords import hash_pwd, check_pwd
-from nfl_app.users_db import add_new_user, remove_user, user_exists, fetch_user, update_user, fetch_all_users, save_play, unsave_play, fetch_saved_plays
+from nfl_app.users_db import (
+    add_new_user,
+    remove_user,
+    user_exists,
+    fetch_user,
+    update_user,
+    fetch_all_users,
+    save_play,
+    unsave_play,
+    fetch_saved_plays,
+)
 from nfl_app.search_db import fetch_play
 from nfl_app.search import perform_search
 
@@ -28,8 +46,14 @@ def index():
                 email = session["email"]
                 fname = fetch_user(email)[0]
                 username = email.split("@")[0]
-    return render_template("index.html", authenticated=authenticated, fname=fname, username=username, email=email)
-    
+    return render_template(
+        "index.html",
+        authenticated=authenticated,
+        fname=fname,
+        username=username,
+        email=email,
+    )
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -72,7 +96,7 @@ def register():
 
 
 @app.route("/account", methods=["GET", "POST"])
-def account(): 
+def account():
     if not session.get("authenticated"):
         return redirect(url_for("login"))
     email = request.args.get("email")
@@ -114,13 +138,13 @@ def unsave():
     return redirect(url_for("account", email=email))
 
 
-@app.route("/search", methods=["GET","POST"])
+@app.route("/search", methods=["GET", "POST"])
 def search():
     if not session.get("authenticated"):
         return redirect(url_for("login"))
     if request.method == "POST":
         rows, template = perform_search(request.form)
-        if (request.form.get("export")):
+        if request.form.get("export"):
             si = StringIO()
             cw = csv.writer(si)
             cw.writerow(rows)

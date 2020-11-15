@@ -31,7 +31,7 @@ def user_exists(email):
 
 
 def retrieve_pwd_hash(email):
-    if (not user_exists(email)):
+    if not user_exists(email):
         return None
     cur = mysql.connection.cursor()
     sql = """SELECT password_hash FROM Users WHERE email=%s"""
@@ -42,14 +42,14 @@ def retrieve_pwd_hash(email):
 
 
 def fetch_user(email):
-    if (not user_exists(email)):
+    if not user_exists(email):
         return None
     cur = mysql.connection.cursor()
     sql = """SELECT * FROM Users WHERE email=%s"""
     cur.execute(sql, (email,))
-    rv = cur.fetchone() # row as tuple (fname, lname, email, hashed_password)
+    rv = cur.fetchone()  # row as tuple (fname, lname, email, hashed_password)
     cur.close()
-    return rv 
+    return rv
 
 
 def update_user(fname, lname, email, hashed_password):
