@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block title %}
+Home
+{% endblock %}
+
 {% block content %}
     <div>
         <ul class="navbar-top">
@@ -7,6 +11,12 @@
                 <p style="font-weight: bold;">NFL Plays</p>
             </li>
             {% if authenticated %}
+                <li class="navbar-item">
+                    <a href="{{ url_for('search') }}">Search!</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="{{ url_for('account', email=email) }}">Account</a>
+                </li>
                 <li class="navbar-item">
                     <a href="{{ url_for('logout') }}">Log Out</a>
                 </li>
