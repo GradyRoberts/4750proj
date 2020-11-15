@@ -60,10 +60,8 @@ def login():
         if user_exists(email):
             if check_pwd(email, password):
                 res = make_response(redirect(url_for("index")))
-                if "authenticated" not in request.cookies:
-                    res.set_cookie("authenticated", "True")
-                if "email" not in request.cookies:
-                    res.set_cookie("email", email)
+                res.set_cookie("authenticated", "True")
+                res.set_cookie("email", email)
                 return res
         return render_template("login.html", error="Login failed.")
     return render_template("login.html", error="")
