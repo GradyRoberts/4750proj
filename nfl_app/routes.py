@@ -10,13 +10,16 @@ from flask import render_template, request, redirect, url_for, session, make_res
 
 
 from nfl_app.passwords import hash_pwd, check_pwd
-from nfl_app.users import add_new_user, remove_user, user_exists, fetch_user, fetch_all_users
+from nfl_app.users_db import add_new_user, remove_user, user_exists, fetch_user, update_user, fetch_all_users, save_play, unsave_play, fetch_saved_plays
+from nfl_app.search_db import fetch_play
 from nfl_app.search import perform_search
 
 
 @app.route("/")
 def index():
     fname = ""
+    username = ""
+    email = ""
     authenticated = False
     if "authenticated" in session:
         if session["authenticated"]:
@@ -24,7 +27,8 @@ def index():
                 authenticated = True
                 email = session["email"]
                 fname = fetch_user(email)[0]
-    return render_template("index.html", authenticated=authenticated, fname=fname)
+                username = email.split("@")[0]
+    return render_template("index.html", authenticated=authenticated, fname=fname, username=username, email=email)
     
 
 @app.route("/login", methods=["GET", "POST"])
@@ -67,6 +71,49 @@ def register():
     return render_template("register.html", error="")
 
 
+@app.route("/account", methods=["GET", "POST"])
+def account(): 
+    if not session.get("authenticated"):
+        return redirect(url_for("login"))
+    email = request.args.get("email")
+    if request.method == "POST":
+        form_name = request.form.get("form_name")
+        if form_name == "update_user":
+            fname = request.form.get("fname")
+            lname = request.form.get("lname")
+            password = request.form.get("password")
+            hashed_password = hash_pwd(password)
+            update_user(fname, lname, email, hashed_password)
+        elif form_name == "delete_account":
+            remove_user(email)
+            return redirect(url_for("logout"))
+    ids = fetch_saved_plays(email)
+    rows = [fetch_play(game_id, play_id) for game_id, play_id in ids]
+    return render_template("account.html", email=email, rows=rows)
+
+
+@app.route("/save_play")
+def save():
+    if not session.get("authenticated"):
+        return redirect(url_for("login"))
+    email = request.args.get("email")
+    game_id = request.args.get("game_id")
+    play_id = request.args.get("play_id")
+    save_play(email, game_id, play_id)
+    return redirect(url_for("account", email=email))
+
+
+@app.route("/unsave_play")
+def unsave():
+    if not session.get("authenticated"):
+        return redirect(url_for("login"))
+    email = request.args.get("email")
+    game_id = request.args.get("game_id")
+    play_id = request.args.get("play_id")
+    unsave_play(email, game_id, play_id)
+    return redirect(url_for("account", email=email))
+
+
 @app.route("/search", methods=["GET","POST"])
 def search():
     if not session.get("authenticated"):
@@ -81,5 +128,6 @@ def search():
             output.headers["Content-Disposition"] = "attachment; filename=export.csv"
             output.headers["Content-type"] = "text/csv"
             return output
-        return render_template(template, rows=rows)
+        email = session.get("email")
+        return render_template(template, rows=rows, email=email)
     return render_template("search.html")

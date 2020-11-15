@@ -12,6 +12,12 @@ Home
             </li>
             {% if authenticated %}
                 <li class="navbar-item">
+                    <a href="{{ url_for('search') }}">Search!</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="{{ url_for('account', email=email) }}">Account</a>
+                </li>
+                <li class="navbar-item">
                     <a href="{{ url_for('logout') }}">Log Out</a>
                 </li>
                 <li class="navbar-item">

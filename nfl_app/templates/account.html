@@ -1,14 +1,34 @@
 {% extends 'base.html' %}
 
-{% block title %}
-Search Results
-{% endblock %}
-
 {% block content %}
     <div>
-        <a href="{{ url_for('search') }}">Back to Search</a>
+        <a href="{{ url_for('index') }}">Back to Home</a>
     </div>
     <div>
+        <p>Update account details</p>
+        <form method="POST">
+            <input type="hidden" name="form_name" value="update_user">
+            <label for="fname">First Name</label>
+            <input name="fname" id="fname" required><br>
+            <label for="lname">Last Name</label>
+            <input name="lname" id="lname" required><br>
+            <label for="email">Email</label>
+            <input name="email" id="email" value="{{ email }}" readonly><br>
+            <label for="password">Password</label>
+            <input name="password" id="password" type="password" required><br>
+            <input type="submit" value="Update">
+        </form>
+    </div>
+    <div>
+        <p class="error">Delete account</p>
+        <form method="POST">
+            <input type="hidden" name="form_name" value="delete_account">
+            <input type="hidden" name="email" value="{{ email }}">
+            <input type="submit" value="Confirm">
+        </form>
+    </div>
+    <div>
+        <h3>Saved Plays</h3>
         <table>
             <tr>
                 <th>Game ID</th> 
@@ -44,9 +64,7 @@ Search Results
                     <td>{{ row[12] }}</td>
                     <td>{{ row[13] }}</td>
                     <td>
-                        <a href="{{ url_for('save', email=email, game_id=row[0], play_id=row[1]) }}">Save</a>, 
-                        <a href="{{ url_for('index') }}">Update</a>, 
-                        <a href="{{ url_for('index') }}">Delete</a>
+                        <a href="{{ url_for('unsave', email=email, game_id=row[0], play_id=row[1]) }}">Unsave</a>
                     </td>
                 </tr>
             {% endfor %}
