@@ -1,0 +1,65 @@
+
+<div>
+    <form method="post">
+        <li class="navbar-li">
+            <p style="font-weight: bold;">NFL Plays</p>
+        </li>
+        {% if authenticated %}
+            <li class="navbar-item">
+                <a href="{{ url_for('logout') }}">Log Out</a>
+            </li>
+
+            <label for="game_id">Game ID</label>
+            <input name="game_id" id="game_id" required><br>
+
+            <label for="play_id">Play ID</label>
+            <input name="play_id" id="play_id" required><br>
+
+            <label for="desc">Description</label>
+            <input name="desc" id="desc" required><br>
+
+            <label for="play_type">Play type</label>
+            <input name="play_type" id="play_type" required><br>
+
+            <label for="posteam">Posteam</label>
+            <input name="posteam" id="posteam" required><br>
+
+            <label for="posteam_type">Posteam type</label>
+            <input name="posteam_type" id="posteam_type" required><br>
+
+            <label for="yards_gained">Yards gained</label>
+            <input name="yards_gained" id="yards_gained" required><br>
+
+            <label for="side_of_field">Side of Field</label>
+            <input name="side_of_field" id="side_of_field" required><br>
+
+            <label for="yrdln">Yardline</label>
+            <input name="yrdln" id="yrdln" required><br>
+
+            <label for="qtr">Quarter</label>
+            <input name="qtr" id="qtr" required><br>
+
+            <label for="time">Time</label>
+            <input name="time" id="time" required><br>
+
+            <label for="wp">WP</label>
+            <input name="wp" id="wp" required><br>
+
+            <label for="down">Down #</label>
+            <input name="down" id="down" required><br>
+
+            <label for="ydstogo">Yards to go</label>
+            <input name="ydstogo" id="ydstogo" required><br>
+
+            <input type="submit" value="add play">
+        {% else %}
+            <p>You are not logged in</p>
+            <li class="navbar-item">
+                <a href="{{ url_for('login') }}">Login</a>
+            </li> 
+            <li class="navbar-item">
+                <a href="{{ url_for('register') }}">Register</a>
+            </li>
+        {% endif %}
+        </form>
+</div>

@@ -1,0 +1,29 @@
+
+<div>
+    <form method="post">
+        <li class="navbar-li">
+            <p style="font-weight: bold;">NFL Plays</p>
+        </li>
+        {% if authenticated %}
+            <li class="navbar-item">
+                <a href="{{ url_for('logout') }}">Log Out</a>
+            </li>
+
+            <label for="game_id">Game ID</label>
+            <input name="game_id" id="game_id" required><br>
+
+            <label for="play_id">Play ID</label>
+            <input name="play_id" id="play_id" required><br>
+
+            <input type="submit" value="delete play">
+        {% else %}
+            <p>You are not logged in</p>
+            <li class="navbar-item">
+                <a href="{{ url_for('login') }}">Login</a>
+            </li> 
+            <li class="navbar-item">
+                <a href="{{ url_for('register') }}">Register</a>
+            </li>
+        {% endif %}
+        </form>
+</div>

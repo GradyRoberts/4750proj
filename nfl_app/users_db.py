@@ -4,12 +4,6 @@ Functions that interface with the database related to users.
 
 from nfl_app.conndb import mysql
 
-admin_emails = [
-    "awz2pj@virginia.edu",
-    "ztm5xq@virginia.edu",
-    "gnr7aj@virginia.edu",
-    "dpc7ns@virginia.edu"
-]
 
 def add_new_user(fname, lname, email, hashed_password):
     cur = mysql.connection.cursor()
@@ -76,6 +70,38 @@ def fetch_all_users():
     cur.close()
     return str(rv)
 
+
+def save_play(email, game_id, play_id):
+    cur = mysql.connection.cursor()
+    sql = """INSERT INTO SavedPlays VALUES (%s, %s, %s)"""
+    cur.execute(sql, (email, play_id, game_id))
+    mysql.connection.commit()
+    cur.close()
+
+
+def unsave_play(email, game_id, play_id):
+    cur = mysql.connection.cursor()
+    sql = """DELETE FROM SavedPlays WHERE email=%s AND play_id=%s AND game_id=%s"""
+    cur.execute(sql, (email, play_id, game_id))
+    mysql.connection.commit()
+    cur.close()
+
+
+def fetch_saved_plays(email):
+    cur = mysql.connection.cursor()
+    sql = """SELECT game_id, play_id FROM SavedPlays WHERE email=%s"""
+    cur.execute(sql, (email,))
+    rv = cur.fetchall()
+    cur.close()
+    return rv
+
+
+admin_emails = [
+    "awz2pj@virginia.edu",
+    "gnr7aj@virginia.edu",
+    "ztm7xq@virginia.edu",
+    "dpc7ns@virginia.edu"
+]
 
 def is_admin(email):
     """

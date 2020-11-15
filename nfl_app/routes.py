@@ -17,9 +17,6 @@ from flask import (
 
 
 from nfl_app.passwords import hash_pwd, check_pwd
-<<<<<<< HEAD
-from nfl_app.users import add_new_user, remove_user, user_exists, fetch_user, fetch_all_users, is_admin
-=======
 from nfl_app.users_db import (
     add_new_user,
     remove_user,
@@ -30,10 +27,12 @@ from nfl_app.users_db import (
     save_play,
     unsave_play,
     fetch_saved_plays,
+    is_admin
 )
 from nfl_app.search_db import fetch_play
 from nfl_app.search import perform_search
->>>>>>> 43454b6f645fa1bd6ea9f40134330704ceae40e5
+
+from nfl_app.plays_db import edit_play, add_play
 
 
 @app.route("/")
@@ -42,22 +41,11 @@ def index():
     username = ""
     email = ""
     authenticated = False
-<<<<<<< HEAD
     isAdmin = False
-    if "authenticated" in session:
-        if session["authenticated"]:
-            if "email" in session:
-                authenticated = True
-                email = session["email"]
-                fname = fetch_user(email)[0]
-            isAdmin = is_admin(email)
-            session["isAdmin"] = isAdmin
-        print("permissions: ", authenticated, isAdmin)
-    return render_template("index.html", authenticated=authenticated, fname=fname, isAdmin=isAdmin)
-=======
     if request.cookies.get("authenticated")=="True":
         authenticated = True
         email = request.cookies.get("email")
+        isAdmin = is_admin(email)
         fname = fetch_user(email)[0]
         username = email.split("@")[0]
     return render_template(
@@ -66,9 +54,38 @@ def index():
         fname=fname,
         username=username,
         email=email,
+        isAdmin=isAdmin
     )
->>>>>>> 43454b6f645fa1bd6ea9f40134330704ceae40e5
 
+# @app.route("/")
+# def index():
+#     fname = ""
+#     username = ""
+#     email = ""
+#     authenticated = False
+#     isAdmin = False
+#     if "authenticated" in session:
+#         if session["authenticated"]:
+#             if "email" in session:
+#                 authenticated = True
+#                 email = session["email"]
+#                 fname = fetch_user(email)[0]
+#             isAdmin = is_admin(email)
+#             session["isAdmin"] = isAdmin
+#         print("permissions: ", authenticated, isAdmin)
+#     return render_template("index.html", authenticated=authenticated, fname=fname, isAdmin=isAdmin)
+#     if request.cookies.get("authenticated")=="True":
+#         authenticated = True
+#         email = request.cookies.get("email")
+#         fname = fetch_user(email)[0]
+#         username = email.split("@")[0]
+#     return render_template(
+#         "index.html",
+#         authenticated=authenticated,
+#         fname=fname,
+#         username=username,
+#         email=email,
+#     )
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -77,24 +94,32 @@ def login():
         password = request.form.get("password")
         if user_exists(email):
             if check_pwd(email, password):
-<<<<<<< HEAD
-                session["authenticated"] = True
-                if "email" not in session:
-                    session["email"] = email
-                if "isAdmin" not in session:
-                    session["isAdmin"] = is_admin(email)
-                print("user is admin: ", session["isAdmin"])
-                return redirect(url_for("index"))
-        else:
-            print("user did not exist", email)
-=======
                 res = make_response(redirect(url_for("index")))
                 res.set_cookie("authenticated", "True")
                 res.set_cookie("email", email)
+                res.set_cookie("isAdmin", str(is_admin(email)))
                 return res
->>>>>>> 43454b6f645fa1bd6ea9f40134330704ceae40e5
         return render_template("login.html", error="Login failed.")
     return render_template("login.html", error="")
+
+# @app.route("/login", methods=["GET", "POST"])
+# def login():
+#     if request.method == "POST":
+#         email = request.form.get("email")
+#         password = request.form.get("password")
+#         if user_exists(email):
+#             if check_pwd(email, password):
+#                 session["authenticated"] = True
+#                 if "email" not in session:
+#                     session["email"] = email
+#                 if "isAdmin" not in session:
+#                     session["isAdmin"] = is_admin(email)
+#                 print("user is admin: ", session["isAdmin"])
+#                 return redirect(url_for("index"))
+#         else:
+#             print("user did not exist", email)
+#         return render_template("login.html", error="Login failed.")
+#     return render_template("login.html", error="")
 
 
 @app.route("/logout")
@@ -147,59 +172,6 @@ def account():
 def save():
     if request.cookies.get("authenticated")=="False":
         return redirect(url_for("login"))
-    return render_template("register.html")
-
-
-
-@app.route("/admin/removeuser", methods=["GET", "POST"])
-def admin_remove_user():
-    authenticated = False
-    if request.method == "POST":
-        if "authenticated" in session:
-            if session["authenticated"]:
-                authenticated = True
-                user_email = request.form.get("email")
-                remove_user(user_email)
-                print("success")
-        return redirect(url_for("index"))
-    else:
-        if "authenticated" in session and session["authenticated"]:
-            authenticated = True
-    return render_template("admin/removeuser.html", authenticated=authenticated)
-
-@app.route("/admin/editplay", methods=["GET", "POST"])
-def admin_edit_play():
-    fields = {
-        "new_game_id": "",
-        "old_game_id": "",
-        "new_desc": "",
-        "new_play_type": "",
-        "new_posteam": "",
-        "new_posteam_type": "",
-        "new_yards_gained": "",
-        "new_side_of_field": "",
-        "new_yrdln": "",
-        "new_qtr": "",
-        "new_time": "",
-        "new_wp": "",
-        "new_down": "",
-        "new_ydstogo": ""
-    }
-    authenticated = False
-    if request.method == "POST":
-        if "authenticated" in session:
-            if session["authenticated"]:
-                authenticated = True
-                for key in fields:
-                    fields[key] = request.form.get(key)
-                
-                remove_user(user_email)
-                print("success")
-        return redirect(url_for("index"))
-    else:
-        if "authenticated" in session and session["authenticated"]:
-            authenticated = True
-    return render_template("admin/removeuser.html", authenticated=authenticated)
     email = request.args.get("email")
     game_id = request.args.get("game_id")
     play_id = request.args.get("play_id")
@@ -235,3 +207,90 @@ def search():
         email = request.cookies.get("email")
         return render_template(template, rows=rows, email=email)
     return render_template("search.html")
+
+
+
+@app.route("/admin/removeuser", methods=["GET", "POST"])
+def admin_remove_user():
+    authenticated = False
+    if request.cookies.get("authenticated")=="True":
+        authenticated = True
+    if request.method == "POST":
+        if authenticated:
+            user_email = request.form.get("email")
+            remove_user(user_email)
+        return redirect(url_for("index"))
+    return render_template("admin/removeuser.html", authenticated=authenticated)
+
+@app.route("/admin/editplay", methods=["GET", "POST"])
+def admin_edit_play():
+    fields = {
+        "new_game_id": "",
+        "new_play_id": "",
+        "new_desc": "",
+        "new_play_type": "",
+        "new_posteam": "",
+        "new_posteam_type": "",
+        "new_yards_gained": "",
+        "new_side_of_field": "",
+        "new_yrdln": "",
+        "new_qtr": "",
+        "new_time": "",
+        "new_wp": "",
+        "new_down": "",
+        "new_ydstogo": ""
+    }
+    authenticated = False
+    if request.cookies.get("authenticated")=="True":
+        authenticated = True
+    if request.method == "POST":
+        if authenticated:
+            for key in fields:
+                fields[key] = request.form.get(key)
+            admin_edit_play(fields)
+        return redirect(url_for("index"))
+    return render_template("admin/editplay.html", authenticated=authenticated)
+                
+
+@app.route("/admin/addplay", methods=["GET", "POST"])
+def admin_add_play():
+    fields = {
+        "game_id": "",
+        "play_id": "",
+        "desc": "",
+        "play_type": "",
+        "posteam": "",
+        "posteam_type": "",
+        "yards_gained": "",
+        "side_of_field": "",
+        "yrdln": "",
+        "qtr": "",
+        "time": "",
+        "wp": "",
+        "down": "",
+        "ydstogo": ""
+    }
+    authenticated = False
+    if request.cookies.get("authenticated")=="True":
+        authenticated = True
+    if request.method == "POST":
+        if authenticated:
+            for key in fields:
+                fields[key] = request.form.get(key)
+            admin_add_play(fields)
+        return redirect(url_for("index"))
+    return render_template("admin/addplay.html", authenticated=authenticated)
+
+
+@app.route("/admin/deleteplay", methods=["GET", "POST"])
+def admin_delete_play():
+    authenticated = False
+    if request.cookies.get("authenticated")=="True":
+        authenticated = True
+    if request.method == "POST":
+        game_id = request.args.get("game_id")
+        play_id = request.args.get("play_id")
+        if authenticated:
+            admin_delete_play(game_id, play_id)
+        return redirect(url_for("index"))
+    return render_template("admin/deleteplay.html", authenticated=authenticated)

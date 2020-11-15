@@ -8,9 +8,6 @@
             <li class="navbar-item">
                 <a href="{{ url_for('logout') }}">Log Out</a>
             </li>
-            <li class="navbar-item">
-                <p>Welcome, {{ fname }}!</p>
-            </li>
 
             <label for="old_game_id">Game ID to edit</label>
             <input name="old_game_id" id="old_game_id" required><br>
@@ -42,6 +39,9 @@
             <label for="new_qtr">Quarter</label>
             <input name="new_qtr" id="new_qtr" required><br>
 
+            <label for="new_time">Time</label>
+            <input name="new_time" id="new_time" required><br>
+
             <label for="new_wp">WP</label>
             <input name="new_wp" id="new_wp" required><br>
 
@@ -51,7 +51,7 @@
             <label for="new_ydstogo">Yards to go</label>
             <input name="new_ydstogo" id="new_ydstogo" required><br>
 
-            <input type="submit" value="remove user">
+            <input type="submit" value="edit play">
         {% else %}
             <p>You are not logged in</p>
             <li class="navbar-item">
